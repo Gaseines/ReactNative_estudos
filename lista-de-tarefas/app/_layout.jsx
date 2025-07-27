@@ -8,9 +8,17 @@ import {
   StyleSheet,
   View,
   Pressable,
+  FlatList,
 } from "react-native";
 import check from "../assets/images/check.png";
 import { colors } from "../constant/colors";
+import Task from "../components/Task";
+
+const tasks = [
+  { id: 1, completed: true, text: "Lavar a Louça" },
+  { id: 2, completed: false, text: "Varrer a Casa" },
+  { id: 3, completed: false, text: "Ir na Academia" },
+];
 
 export default function RootLayout() {
   return (
@@ -32,6 +40,14 @@ export default function RootLayout() {
         >
           <Text style={styles.buttonText}>+</Text>
         </Pressable>
+      </View>
+
+      <View>
+        <FlatList
+          data={tasks}
+          // keyExtractor={(item) => item.text} isso se usa caso o item não tenha o ID
+          renderItem={({ item }) => <Task text={item.text}/>}
+        />
       </View>
     </ScrollView>
   );
