@@ -1,15 +1,25 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Fontisto, Ionicons } from "@expo/vector-icons";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Entypo, Fontisto } from "@expo/vector-icons";
 import { colors } from "../constant/colors";
+import { useState } from "react";
 
-const Task = ({ text }) => {
+export default function Task({ text, initialCompleted }) {
+  const [completed, setCompleted] = useState(initialCompleted);
+
+
   return (
     <View style={style.tasks}>
-      <Pressable>
-        <Fontisto name="checkbox-passive" size={24} color={colors.primary} />
+      <Pressable onPress={() => {setCompleted(!completed)}}>
+        {completed ? (
+          <Entypo name="check" size={24} color={"green"} />
+        ) : (
+          <Fontisto name="checkbox-passive" size={24} color={colors.primary} />
+        )}
       </Pressable>
 
-      <Text style={style.textTask}>{text}</Text>
+      <Text style={completed ? style.taskCompleted : style.textTask }>
+        {text}
+      </Text>
     </View>
   );
 };
@@ -19,12 +29,18 @@ const style = StyleSheet.create({
     marginTop: 20,
     display: "flex",
     flexDirection: "row",
-    gap: 20
+    gap: 20,
   },
   textTask: {
     fontSize: 18,
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
+
+  taskCompleted: {
+    textDecorationLine: "line-through",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "green"
+  },
 });
 
-export default Task;

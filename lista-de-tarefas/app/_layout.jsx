@@ -1,7 +1,5 @@
 import {
-  Button,
   Image,
-  ScrollView,
   Text,
   TextInput,
   Alert,
@@ -13,26 +11,34 @@ import {
 import check from "../assets/images/check.png";
 import { colors } from "../constant/colors";
 import Task from "../components/Task";
+import { useState } from "react";
 
-const tasks = [
+const initialTasks = [
   { id: 1, completed: true, text: "Lavar a Louça" },
   { id: 2, completed: false, text: "Varrer a Casa" },
   { id: 3, completed: false, text: "Ir na Academia" },
 ];
 
 export default function RootLayout() {
+  const [tasks, setTasks] = useState(initialTasks);
+  const [text, setText] = useState("");
+
+  const onAdd = () => {
+    const newTask = { id: tasks.length + 1, completed: false, text };
+    setTasks([...tasks, newTask]);
+    setText("");
+  };
+
   return (
-    <ScrollView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={check} style={styles.img} />
         <Text style={styles.title}>Minhas Tarefas</Text>
       </View>
       <View style={styles.containerInput}>
-        <TextInput style={styles.input} />
+        <TextInput value={text} onChangeText={setText} style={styles.input} />
         <Pressable
-          onPress={() => {
-            Alert.alert("tchau");
-          }}
+          onPress={onAdd}
           style={({ pressed }) => [
             styles.button,
             { backgroundColor: pressed ? "lightblue" : colors.primary },
@@ -46,10 +52,12 @@ export default function RootLayout() {
         <FlatList
           data={tasks}
           // keyExtractor={(item) => item.text} isso se usa caso o item não tenha o ID
-          renderItem={({ item }) => <Task text={item.text}/>}
+          renderItem={({ item }) => (
+            <Task text={item.text} initialCompleted={item.completed} />
+          )}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
