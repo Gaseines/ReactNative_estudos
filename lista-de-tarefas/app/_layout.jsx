@@ -12,6 +12,7 @@ import check from "../assets/images/check.png";
 import { colors } from "../constant/colors";
 import Task from "../components/Task";
 import { useState } from "react";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const initialTasks = [
   { id: 1, completed: true, text: "Lavar a Louça" },
@@ -30,6 +31,7 @@ export default function RootLayout() {
   };
 
   return (
+     <GestureHandlerRootView>
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={check} style={styles.img} />
@@ -53,11 +55,14 @@ export default function RootLayout() {
           data={tasks}
           // keyExtractor={(item) => item.text} isso se usa caso o item não tenha o ID
           renderItem={({ item }) => (
-            <Task text={item.text} initialCompleted={item.completed} />
+            <Task text={item.text} initialCompleted={item.completed} 
+            deleteTask={() => {setTasks(tasks.filter(t => t.id !== item.id))}}
+            />
           )}
         />
       </View>
     </View>
+    </GestureHandlerRootView>
   );
 }
 
